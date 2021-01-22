@@ -40,7 +40,7 @@ public class ManualSwitchController : MonoBehaviour
         {
             Bulb = theBulb.GetComponent<bulbController>();
         }
-        
+
         turnOff();
     }
 
@@ -69,7 +69,7 @@ public class ManualSwitchController : MonoBehaviour
     public void enableSwitch()
     {
         switchEnabled = true;
-        
+
     }
 
     public void disableSwitch()
@@ -79,32 +79,43 @@ public class ManualSwitchController : MonoBehaviour
 
     // The following function will toggle the switch but only if the 
     // switch is enabled
-    public void toggleSwitch()
+    public bool toggleSwitch()
     {
         if (switchEnabled == true)
         {
-            switchOff = !switchOff;
-            switchAnimator.SetBool("SwitchOff", switchOff);
-            
+            if (switchOff == true)
+            {
+                turnOn();
+            }
+            else
+            {
+                turnOff();
+            }
+
+            // returns true so that the code tha called this function knows
+            // that the toggle worked
+            return true;
         }
         else
         {
             Debug.Log("Can't toggle switch as it's not enabled");
+            return false;
         }
     }
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log("Someone entered the switch trigger");
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("Someone entered the switch trigger");
+            this.enableSwitch();
+        }
+    
 
-        this.enableSwitch();
+        void OnTriggerExit2D(Collider2D other)
+        {
+            Debug.Log("Someone left the switch trigger");
+
+            this.disableSwitch();
+        }
+
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log("Someone left the switch trigger");
-
-        this.disableSwitch();
-    }
-
-}
